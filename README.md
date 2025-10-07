@@ -1,4 +1,5 @@
 ---
-sdk: python
-app_file: app.py
+title: InterviewIQ AI Simulator
+sdk: docker
+app_port: 7860
 ---
