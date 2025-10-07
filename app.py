@@ -52,10 +52,10 @@ def set_api():
     
     if not api_key:
         return jsonify({'error': 'API key is required'}), 400
-    
+    # Make the session temporary (cleared when browser closes)
+    session.permanent = False
     session['api_key'] = api_key
-    os.environ['HUGGINGFACEHUB_API_TOKEN'] = api_key
-    
+    # os.environ['HUGGINGFACEHUB_API_TOKEN'] = api_key  # No longer needed
     return jsonify({'status': 'success', 'message': 'API key saved successfully'})
 
 
