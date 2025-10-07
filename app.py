@@ -152,9 +152,9 @@ def chat():
         return jsonify({'error': 'No message provided'}), 400
     
     try:
-        # Check API key
-        if 'api_key' not in session:
-            return jsonify({'error': 'Please set your API key first'}), 400
+        # Check if HuggingFace API key is set (either from session or environment)
+        if 'api_key' not in session and not os.getenv('HUGGINGFACEHUB_API_TOKEN'):
+            return jsonify({'error': 'Please set your HuggingFace API key first'}), 400
         
         # Get AI response
         ai_response = AI_model.chat_with_history(user_message, session_id, use_resume)

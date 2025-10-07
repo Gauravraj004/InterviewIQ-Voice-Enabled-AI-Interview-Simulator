@@ -44,7 +44,7 @@ async function sendMessage(text) {
         });
         const data = await resp.json();
         if (data.error && /api key/i.test(data.error)) {
-            addMessage('Please provide your HuggingFace API key in the left sidebar. Get one at https://huggingface.co/settings/tokens', 'bot');
+            addMessage('⚠️ Please provide your HuggingFace API key in the left sidebar. Get one at https://huggingface.co/settings/tokens', 'bot');
             const inp = document.getElementById('api-key-input');
             if (inp) inp.focus();
         } else if (data.response) {
@@ -189,7 +189,7 @@ micBtn.addEventListener('click', async () => {
             const resp = await fetch('/speech', { method: 'POST', body: formData });
             const data = await resp.json();
             if (data.error && /api key/i.test(data.error)) {
-                addMessage('Please provide your HuggingFace API key in the left sidebar. Get one at https://huggingface.co/settings/tokens', 'bot');
+                addMessage('⚠️ Please provide your HuggingFace API key in the left sidebar first!', 'bot');
                 const inp = document.getElementById('api-key-input');
                 if (inp) inp.focus();
             } else if (data.error) {
@@ -215,33 +215,40 @@ micBtn.addEventListener('click', async () => {
     }
 });
 
+// API Key Management
 const saveApiBtn = document.getElementById('save-api-btn');
 const apiKeyInput = document.getElementById('api-key-input');
 const apiStatus = document.getElementById('api-status');
 
-saveApiBtn.addEventListener('click', async () => {
-    const apiKey = apiKeyInput.value.trim();
-    if (!apiKey) {
-        apiStatus.textContent = ' Please enter an API key';
-        return;
-    }
-    try {
-        const resp = await fetch('/set_api', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ api_key: apiKey })
-        });
-        const data = await resp.json();
-        if (data.status === 'success') {
-            apiStatus.textContent = ' API key saved successfully';
-            apiKeyInput.value = '';
-        } else {
-            apiStatus.textContent = ' Failed to save API key';
+if (saveApiBtn && apiKeyInput) {
+    saveApiBtn.addEventListener('click', async () => {
+        const apiKey = apiKeyInput.value.trim();
+        if (!apiKey) {
+            apiStatus.textContent = '⚠️ Please enter an API key';
+            apiStatus.style.color = '#ff6b6b';
+            return;
         }
-    } catch (err) {
-        apiStatus.textContent = ' Error: ' + err.message;
-    }
-});
+        try {
+            const resp = await fetch('/set_api', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ api_key: apiKey })
+            });
+            const data = await resp.json();
+            if (data.status === 'success') {
+                apiStatus.textContent = '✅ API key saved successfully';
+                apiStatus.style.color = '#51cf66';
+                apiKeyInput.value = '';
+            } else {
+                apiStatus.textContent = '❌ Failed to save API key';
+                apiStatus.style.color = '#ff6b6b';
+            }
+        } catch (err) {
+            apiStatus.textContent = '❌ Error: ' + err.message;
+            apiStatus.style.color = '#ff6b6b';
+        }
+    });
+}
 
 const uploadResumeBtn = document.getElementById('upload-resume-btn');
 const resumeUploadInput = document.getElementById('resume-upload');

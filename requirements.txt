@@ -1,0 +1,27 @@
+# Flask Web Server
+Flask
+Flask-Cors
+werkzeug
+gunicorn
+
+# LangChain and AI (versions removed to resolve conflicts)
+langchain
+langchain-core
+langchain-huggingface
+langchain-community
+langchain-text-splitters
+sentence-transformers
+
+# Database and Data Handling
+cassio
+pypdf
+python-dotenv
+
+# Speech Recognition
+SpeechRecognition
+pyaudio
+
+# Other Dependencies
+transformers
+torch
+huggingface-hub

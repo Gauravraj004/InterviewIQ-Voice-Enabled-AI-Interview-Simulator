@@ -9,6 +9,9 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Cassandra
 import cassio
 
+# Load environment variables at module level (for deployed environments)
+load_dotenv()
+
 # Global store for chat histories (session_id -> ChatMessageHistory)
 _chat_sessions = {}
 
@@ -73,10 +76,7 @@ def cleanup_all_resume_tables():
         int: Number of tables successfully dropped
     """
     try:
-        from dotenv import load_dotenv
-        
-        # Load Astra DB credentials
-        load_dotenv()
+        # Load Astra DB credentials from environment
         astra_token = os.getenv("ASTRA_DB_APPLICATION_TOKEN")
         astra_db_id = os.getenv("ASTRA_DB_ID")
         
@@ -142,14 +142,14 @@ def setup_resume_rag_from_bytes(pdf_bytes, filename: str, session_id: str = "def
         from pypdf import PdfReader
         from langchain.schema import Document
         
-        # Load Astra DB credentials from .env (these are OK to keep in .env)
-        load_dotenv()
+        # Load Astra DB credentials from environment variables
         astra_token = os.getenv("ASTRA_DB_APPLICATION_TOKEN")
         astra_db_id = os.getenv("ASTRA_DB_ID")
         if not astra_token or not astra_db_id:
-            raise ValueError("Astra DB credentials not found in .env file. Please set ASTRA_DB_APPLICATION_TOKEN and ASTRA_DB_ID.")
+            raise ValueError("Astra DB credentials not found. Please set ASTRA_DB_APPLICATION_TOKEN and ASTRA_DB_ID in Hugging Face Space Secrets.")
         
         # Check for HuggingFace token (needed for embeddings)
+        # HF token can come from either UI (set via /set_api) or environment
         hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
         if not hf_token:
             raise ValueError("⚠️ Please provide your HuggingFace API key in the sidebar first!")
@@ -233,12 +233,6 @@ def chat_with_history(user_message: str, session_id: str = "default", use_resume
     Returns:
         AI response string
     """
-    # Don't load from .env - use only what's set in environment by the user
-    # load_dotenv()  # REMOVED - API key must be provided via UI
-    
-    # Use HuggingFace API - token should already be set via /set_api endpoint
-    # No check here - let the endpoint handle validation
-    
     # Get chat history for this session
     history = get_chat_history(session_id)
     

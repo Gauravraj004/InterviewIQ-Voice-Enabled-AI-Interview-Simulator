@@ -1,7 +1,5 @@
 ---
-title: InterviewIQ Voice Enabled AI Interview Simulator
-emoji: 🎙️
-colorFrom: green
-colorTo: blue
+title: InterviewIQ AI Simulator
 sdk: docker
+app_port: 7860
 ---
