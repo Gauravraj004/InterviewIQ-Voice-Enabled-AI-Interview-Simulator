@@ -2,8 +2,6 @@
 FROM python:3.9-slim
 
 # INSTALL SYSTEM DEPENDENCIES
-# We need to install the GCC compiler and PortAudio development libraries
-# so that the 'pyaudio' Python package can be compiled successfully.
 RUN apt-get update && apt-get install -y \
     gcc \
     portaudio19-dev \
@@ -16,6 +14,10 @@ WORKDIR /app
 RUN useradd -m appuser
 USER appuser
 
+# ADD THE USER'S LOCAL BIN DIRECTORY TO THE PATH
+# This is the fix for the 'gunicorn: not found' error
+ENV PATH="/home/appuser/.local/bin:${PATH}"
+
 # Copy the dependencies file to the working directory
 COPY requirements.txt .
 
@@ -27,9 +29,6 @@ COPY . .
 
 # Make port 7860 available to the world outside this container
 EXPOSE 7860
-
-# Define environment variable
-ENV NAME World
 
 # Run app.py when the container launches
 # Use gunicorn as it's a production-ready server
