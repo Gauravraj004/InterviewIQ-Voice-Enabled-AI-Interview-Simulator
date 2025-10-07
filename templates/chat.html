@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterviewIQ · AI Interview Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+</head>
+<body>
+    <!-- Background Animated Elements -->
+    <div class="bg-decoration">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#gradient1)" stroke="white" stroke-width="1.5"/>
+                            <path d="M2 17L12 22L22 17" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="gradient1" x1="2" y1="2" x2="22" y2="12">
+                                    <stop offset="0%" stop-color="#667eea"/>
+                                    <stop offset="100%" stop-color="#764ba2"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1>InterviewIQ</h1>
+                        <p>AI Interview Coach</p>
+                    </div>
+                </div>
+                <button id="new-chat-btn" class="new-chat-btn">
+                    <span class="btn-icon">✨</span>
+                    <span>New Chat</span>
+                </button>
+            </div>
+
+            <div class="sidebar-content">
+                <section class="config-section">
+                    <div class="section-header">
+                        <span class="section-icon">🔑</span>
+                        <h3>API Configuration</h3>
+                    </div>
+                    <div class="config-body">
+                        <label class="input-label">HuggingFace API Token</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="api-key-input" placeholder="Enter your HuggingFace token">
+                            <span class="input-icon">🔒</span>
+                        </div>
+                        <button id="save-api-btn" class="btn-primary">
+                            <span>💾</span> Save API Key
+                        </button>
+                        <p id="api-status" class="status-text"></p>
+                    </div>
+                </section>
+
+                <section class="config-section">
+                    <div class="section-header">
+                        <span class="section-icon">💼</span>
+                        <h3>Interview Mode</h3>
+                    </div>
+                    <div class="config-body">
+                        <label class="radio-option">
+                            <input type="radio" name="interview-mode" value="without-resume" checked>
+                            <span class="radio-custom"></span>
+                            <span class="radio-label">
+                                <strong>General Interview</strong>
+                                <small>Standard questions without context</small>
+                            </span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="interview-mode" value="with-resume">
+                            <span class="radio-custom"></span>
+                            <span class="radio-label">
+                                <strong>Resume-Based</strong>
+                                <small>Questions tailored to your background</small>
+                            </span>
+                        </label>
+                    </div>
+                </section>
+
+                <section class="config-section">
+                    <div class="section-header">
+                        <span class="section-icon">📄</span>
+                        <h3>Upload Resume</h3>
+                    </div>
+                    <div class="config-body">
+                        <input type="file" id="resume-upload" accept=".pdf" style="display: none;">
+                        <button id="upload-resume-btn" class="btn-upload">
+                            <span class="upload-icon">📎</span>
+                            <span>Choose PDF File</span>
+                        </button>
+                        <p id="upload-status" class="status-text"></p>
+                    </div>
+                </section>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="footer-card">
+                    <span class="footer-icon">💡</span>
+                    <p>Get your API key from <a href="https://huggingface.co/settings/tokens" target="_blank">HuggingFace</a></p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-main">
+            <header class="chat-header">
+                <div class="chat-info">
+                    <div class="avatar-large">
+                        <div class="avatar-glow"></div>
+                        <span>🤖</span>
+                    </div>
+                    <div class="header-text">
+                        <h2>InterviewIQ Coach</h2>
+                        <p class="status-indicator">
+                            <span class="dot"></span>
+                            <span>Ready to assist you</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" id="theme-toggle" title="Toggle theme">🌙</button>
+                    <button class="icon-btn" id="clear-chat" title="Clear conversation">🗑️</button>
+                </div>
+            </header>
+
+            <section class="chat-messages" id="chat-box">
+                <div class="welcome-message" style="display: block;">
+                    <div class="welcome-icon">👋</div>
+                    <h3>Welcome to InterviewIQ!</h3>
+                    <p>I'm your AI interview coach, ready to help you ace your next interview. Let's practice together!</p>
+                    <div class="quick-tips">
+                        <div class="tip">
+                            <span class="tip-icon">💬</span>
+                            <span>Type or use voice</span>
+                        </div>
+                        <div class="tip">
+                            <span class="tip-icon">📝</span>
+                            <span>Upload your resume</span>
+                        </div>
+                        <div class="tip">
+                            <span class="tip-icon">🎯</span>
+                            <span>Get personalized questions</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typing-indicator" style="display: none;">
+                <div class="typing-avatar">🤖</div>
+                <div class="typing-bubble">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="chat-input-area">
+                <div class="input-container">
+                    <textarea id="chat-input" placeholder="Type your answer or question..." rows="1"></textarea>
+                    <button id="mic-btn" class="mic-button" title="Voice input">
+                        <span id="mic-icon">🎤</span>
+                    </button>
+                    <button id="send-btn" class="send-button" title="Send message">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z" fill="white"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="mic-animation" class="mic-recording" style="display:none;">
+                    <span class="recording-dot"></span>
+                    <span>Recording...</span>
+                </div>
+                <p class="input-hint">
+                    <kbd>Enter</kbd> to send · <kbd>Shift + Enter</kbd> for new line
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
+</body>
+</html>
