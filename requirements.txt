@@ -1,30 +1,27 @@
-# Core dependencies
-flask==3.1.2
-flask-cors==6.0.1
-python-dotenv==1.0.1
-PyAudio==0.2.14
-SpeechRecognition==3.10.1
-werkzeug==3.1.3
+# Flask Web Server
+Flask
+Flask-Cors
+werkzeug
 gunicorn
 
-# AI/ML dependencies
-langchain==0.3.18
-langchain-core==0.3.28
-langchain-huggingface==0.1.2
-langchain-community==0.3.18
-langchain-text-splitters==0.3.4
-huggingface-hub==0.28.1
-transformers==4.48.3
-torch==2.6.0
-pypdf==5.1.0
+# LangChain and AI (versions removed to resolve conflicts)
+langchain
+langchain-core
+langchain-huggingface
+langchain-community
+langchain-text-splitters
+sentence-transformers
 
-# Additional utilities
-wave
-uuid
+# Database and Data Handling
+cassio
+pypdf
+python-dotenv
 
-# PDF Query with Cassandra/Astra DB dependencies (FREE with HuggingFace)
-cassio==0.1.4
-PyPDF2==3.0.1
-sentence-transformers==2.2.2
-langchain-huggingface==0.1.2
+# Speech Recognition
+SpeechRecognition
+pyaudio
 
+# Other Dependencies
+transformers
+torch
+huggingface-hub
