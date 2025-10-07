@@ -1,6 +1,14 @@
 # Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
+# INSTALL SYSTEM DEPENDENCIES
+# We need to install the GCC compiler and PortAudio development libraries
+# so that the 'pyaudio' Python package can be compiled successfully.
+RUN apt-get update && apt-get install -y \
+    gcc \
+    portaudio19-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # Set the working directory in the container
 WORKDIR /app
 
