@@ -1,7 +1,7 @@
 ---
 title: InterviewIQ Voice Enabled AI Interview Simulator
 emoji: 🐢
-colorFrom: red
+colorFrom: Blue
 colorTo: indigo
 sdk: docker
 pinned: false
