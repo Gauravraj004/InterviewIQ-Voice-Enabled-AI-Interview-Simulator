@@ -8,7 +8,7 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import os
 import io
-##
+
 # Import custom modules
 import AI_model
 import transcribe
@@ -52,10 +52,12 @@ def set_api():
     
     if not api_key:
         return jsonify({'error': 'API key is required'}), 400
-    # Make the session temporary (cleared when browser closes)
-    session.permanent = False
+    
+    
     session['api_key'] = api_key
-    # os.environ['HUGGINGFACEHUB_API_TOKEN'] = api_key  # No longer needed
+    session.permanent = False
+    os.environ['HUGGINGFACEHUB_API_TOKEN'] = api_key
+    
     return jsonify({'status': 'success', 'message': 'API key saved successfully'})
 
 
